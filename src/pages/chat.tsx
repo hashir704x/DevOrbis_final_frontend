@@ -28,11 +28,13 @@ function Chat() {
   const [isLoadingMessages, setIsLoadingMessages] = useState(false);
   const [messagesError, setMessagesError] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const [isSending, setIsSending] = useState(false);
 
   async function handleSendMessage() {
     const trimmedMessage = message.trim();
-    if (!trimmedMessage) return;
+    if (!trimmedMessage || isSending) return;
     try {
+      setIsSending(true);
       let activeChatId = chatId;
       if (!activeChatId) {
         const title = generateChatTitle(trimmedMessage);
@@ -114,6 +116,15 @@ function Chat() {
   useEffect(() => {
     function handleChatChunk(chunk: string) {
       setMessages((prev) => {
+        if (prev.length === 0) {
+          return [
+            {
+              from: "Ai",
+              content: chunk,
+            },
+          ];
+        }
+        
         const lastMessage = prev[prev.length - 1];
         if (lastMessage.from === "Ai") {
           return [
@@ -136,6 +147,7 @@ function Chat() {
 
     function handleChatComplete() {
       console.log("FRONTEND STREAM COMPLETE");
+      setIsSending(false);
     }
     socket.connect();
     socket.on("chat:chunk", handleChatChunk);
@@ -262,8 +274,9 @@ function Chat() {
 
           <button
             type="button"
+            disabled={isSending}
             onClick={handleSendMessage}
-            className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-black text-white transition-opacity hover:opacity-80"
+            className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-black text-white transition-opacity hover:opacity-80 disabled:cursor-not-allowed disabled:opacity-50"
           >
             <ArrowUpIcon size={18} weight="bold" />
           </button>
