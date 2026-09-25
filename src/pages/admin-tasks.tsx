@@ -16,6 +16,7 @@ import {
     getStatusIcon,
     getStatusLabel,
 } from "@/utils/task-formatters";
+import { BACKEND_URL } from "@/utils/backend-url";
 
 function AdminTasks() {
     const [tasks, setTasks] = useState<TaskAdmin[]>([]);
@@ -28,7 +29,7 @@ function AdminTasks() {
                 setLoading(true);
                 setError("");
                 const response = await fetch(
-                    "http://localhost:3000/api/tasks/get-admin-tasks",
+                    `${BACKEND_URL}/api/tasks/get-admin-tasks`,
                     { method: "GET", credentials: "include" },
                 );
                 const data = await response.json();

@@ -16,6 +16,7 @@ import { Button } from "@/components/ui/button";
 import { createTaskSchema } from "@/zod-schemas/task-schema";
 import { toast } from "@/components/ui/toast";
 import { CreateTaskWithAi } from "@/components/create-task/create-task-with-ai";
+import { BACKEND_URL } from "@/utils/backend-url";
 
 function CreateTask() {
   const user = useAuthStore((state) => state.user) as User;
@@ -36,13 +37,10 @@ function CreateTask() {
       try {
         setLoading(true);
         setError(null);
-        const leadsResponse = await fetch(
-          "http://localhost:3000/api/lead/get-all-leads",
-          {
-            method: "GET",
-            credentials: "include",
-          },
-        );
+        const leadsResponse = await fetch(`${BACKEND_URL}/api/lead/get-all-leads`, {
+          method: "GET",
+          credentials: "include",
+        });
         if (!leadsResponse.ok) {
           throw new Error("Failed to fetch leads");
         }
@@ -50,7 +48,7 @@ function CreateTask() {
         setLeads(leadsData.data);
         if (role === "admin") {
           const staffResponse = await fetch(
-            "http://localhost:3000/api/staff/get-all-staff",
+            `${BACKEND_URL}/api/staff/get-all-staff`,
             {
               method: "GET",
               credentials: "include",
@@ -102,7 +100,7 @@ function CreateTask() {
         });
         return;
       }
-      const response = await fetch("http://localhost:3000/api/tasks/create-task", {
+      const response = await fetch(`${BACKEND_URL}/api/tasks/create-task`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

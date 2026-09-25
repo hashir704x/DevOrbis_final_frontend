@@ -17,6 +17,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Spinner } from "@/components/ui/spinner";
 import type { GeneratedTask } from "@/types";
 import { toast } from "@/components/ui/toast";
+import { BACKEND_URL } from "@/utils/backend-url";
 
 type CreateTaskWithAiProps = {
   setTitle: React.Dispatch<React.SetStateAction<string>>;
@@ -42,7 +43,7 @@ export function CreateTaskWithAi({
       setLoading(true);
       setError("");
       const response = await fetch(
-        "http://localhost:3000/api/tasks/create-task-ai",
+        `${BACKEND_URL}/api/tasks/create-task-ai`,
         {
           method: "POST",
           credentials: "include",

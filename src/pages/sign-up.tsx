@@ -6,6 +6,7 @@ import { toast } from "@/components/ui/toast";
 import { Spinner } from "@/components/ui/spinner";
 import { signUpSchema } from "@/zod-schemas/auth-schemas";
 import { useNavigate } from "react-router";
+import { BACKEND_URL } from "@/utils/backend-url";
 
 function SignUp() {
     const navigate = useNavigate();
@@ -30,7 +31,7 @@ function SignUp() {
         }
         try {
             setSignupLoading(true);
-            const response = await fetch("http://localhost:3000/api/auth/signup", {
+            const response = await fetch(`${BACKEND_URL}/api/auth/signup`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

@@ -7,6 +7,7 @@ import {
 import { useRef, useState } from "react";
 import { toast } from "@/components/ui/toast";
 import { Spinner } from "../ui/spinner";
+import { BACKEND_URL } from "@/utils/backend-url";
 
 const allowedTypes = [
     "application/pdf",
@@ -61,7 +62,7 @@ function UploadDocuments() {
             const formData = new FormData();
             formData.append("document", file);
             const response = await fetch(
-                "http://localhost:3000/api/documents/upload",
+                `${BACKEND_URL}/api/documents/upload`,
                 {
                     method: "POST",
                     credentials: "include",

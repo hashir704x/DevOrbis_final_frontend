@@ -13,6 +13,7 @@ import { useSearchParams } from "react-router";
 import type { Message } from "@/types";
 import { Spinner } from "@/components/ui/spinner";
 import { socket } from "@/socket/socket";
+import { BACKEND_URL } from "@/utils/backend-url";
 
 function generateChatTitle(message: string) {
   return message.trim().split(/\s+/).slice(0, 4).join(" ");
@@ -35,7 +36,7 @@ function Chat() {
       let activeChatId = chatId;
       if (!activeChatId) {
         const title = generateChatTitle(trimmedMessage);
-        const response = await fetch("http://localhost:3000/api/chat/create-chat", {
+        const response = await fetch(`${BACKEND_URL}/api/chat/create-chat`, {
           method: "POST",
           credentials: "include",
           headers: {
@@ -90,7 +91,7 @@ function Chat() {
       }
       try {
         setIsLoadingMessages(true);
-        const response = await fetch(`http://localhost:3000/api/chat/${chatId}`, {
+        const response = await fetch(`${BACKEND_URL}/api/chat/${chatId}`, {
           method: "GET",
           credentials: "include",
         });

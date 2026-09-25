@@ -10,6 +10,7 @@ import type { AiUsageStats } from "@/types";
 import { Spinner } from "@/components/ui/spinner";
 import { useEffect, useState } from "react";
 import { formatCost, formatNumber } from "@/utils/ai-usage-formatters";
+import { BACKEND_URL } from "@/utils/backend-url";
 
 function AiUsage() {
   const [stats, setStats] = useState<AiUsageStats | null>(null);
@@ -21,7 +22,7 @@ function AiUsage() {
         setLoading(true);
         setError("");
         const response = await fetch(
-          "http://localhost:3000/api/ai-usage/get-ai-usage",
+          `${BACKEND_URL}/api/ai-usage/get-ai-usage`,
           {
             method: "GET",
             credentials: "include",

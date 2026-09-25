@@ -24,6 +24,7 @@ import { updateTaskSchema } from "@/zod-schemas/task-schema";
 import type { Staff, TaskDetail } from "@/types";
 import { toast } from "@/components/ui/toast";
 import { getPriorityLabel, getStatusLabel } from "@/utils/task-formatters";
+import { BACKEND_URL } from "@/utils/backend-url";
 
 function EditTask() {
     const user = useAuthStore((state) => state.user) as User;
@@ -53,7 +54,7 @@ function EditTask() {
                 setLoading(true);
                 setError("");
                 const taskResponse = await fetch(
-                    `http://localhost:3000/api/tasks/get-task-detail/${taskId}`,
+                    `${BACKEND_URL}/api/tasks/get-task-detail/${taskId}`,
                     {
                         method: "GET",
                         credentials: "include",
@@ -74,7 +75,7 @@ function EditTask() {
                 setAssignedTo(taskDetails.assignedTo);
                 if (user.role === "admin") {
                     const staffResponse = await fetch(
-                        "http://localhost:3000/api/staff/get-all-staff",
+                        `${BACKEND_URL}/api/staff/get-all-staff`,
                         {
                             method: "GET",
                             credentials: "include",
@@ -125,7 +126,7 @@ function EditTask() {
                 return;
             }
             const response = await fetch(
-                `http://localhost:3000/api/tasks/edit-task/${taskId}`,
+                `${BACKEND_URL}/api/tasks/edit-task/${taskId}`,
                 {
                     method: "PUT",
                     headers: {

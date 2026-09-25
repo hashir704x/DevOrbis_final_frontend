@@ -4,6 +4,7 @@ import { Outlet } from "react-router";
 import { Spinner } from "@/components/ui/spinner";
 import { WarningCircleIcon } from "@phosphor-icons/react";
 import { Toaster } from "@/components/ui/toast";
+import { BACKEND_URL } from "@/utils/backend-url";
 
 function AuthProvider() {
     const setUser = useAuthStore((state) => state.setUser);
@@ -15,7 +16,7 @@ function AuthProvider() {
         (async function () {
             try {
                 const response = await fetch(
-                    "http://localhost:3000/api/auth/get-current-user",
+                    `${BACKEND_URL}/api/auth/get-current-user`,
                     {
                         credentials: "include",
                         method: "POST",

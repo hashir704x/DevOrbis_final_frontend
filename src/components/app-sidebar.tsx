@@ -25,6 +25,7 @@ import { useAuthStore } from "@/store/authStore";
 import { toast } from "@/components/ui/toast";
 import { useState } from "react";
 import { Spinner } from "./ui/spinner";
+import { BACKEND_URL } from "@/utils/backend-url";
 
 const navItems: SideBarNavItem[] = [
   {
@@ -83,7 +84,7 @@ export function AppSidebar() {
   async function handleLogout() {
     setIsLoggingOut(true);
     try {
-      const response = await fetch("http://localhost:3000/api/auth/logout", {
+      const response = await fetch(`${BACKEND_URL}/api/auth/logout`, {
         method: "GET",
         credentials: "include",
       });

@@ -7,6 +7,7 @@ import { toast } from "@/components/ui/toast";
 import { verifyOtpSchema } from "@/zod-schemas/auth-schemas";
 import { Spinner } from "@/components/ui/spinner";
 import { useAuthStore } from "@/store/authStore";
+import { BACKEND_URL } from "@/utils/backend-url";
 
 function VerifyEmail() {
     const setUser = useAuthStore((state) => state.setUser);
@@ -29,7 +30,7 @@ function VerifyEmail() {
         try {
             setVerifyEmailLoading(true);
             const response = await fetch(
-                "http://localhost:3000/api/auth/verify-email",
+                `${BACKEND_URL}/api/auth/verify-email`,
                 {
                     method: "POST",
                     headers: {
@@ -74,7 +75,7 @@ function VerifyEmail() {
         try {
             setResendLoading(true);
             const response = await fetch(
-                "http://localhost:3000/api/auth/resend-otp",
+                `${BACKEND_URL}/api/auth/resend-otp`,
                 {
                     method: "POST",
                     headers: {

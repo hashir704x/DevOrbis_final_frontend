@@ -11,6 +11,7 @@ import type { Chat } from "@/types";
 import { useEffect, useState } from "react";
 import { Spinner } from "../ui/spinner";
 import { useSearchParams } from "react-router";
+import { BACKEND_URL } from "@/utils/backend-url";
 
 function PreviousChats() {
     const [chats, setChats] = useState<Chat[]>([]);
@@ -26,7 +27,7 @@ function PreviousChats() {
             try {
                 setIsLoading(true);
                 setError(null);
-                const response = await fetch("http://localhost:3000/api/chat", {
+                const response = await fetch(`${BACKEND_URL}/api/chat`, {
                     method: "GET",
                     credentials: "include",
                 });
