@@ -53,7 +53,8 @@ function SignUp() {
                 description: "Signup successfull, please verify your email now!",
             });
             navigate("/verify-email");
-        } catch (error) {
+        } catch (error) { 
+            console.log("Sign up faild", error);  
             if (error instanceof Error) {
                 toast.add({
                     type: "error",
