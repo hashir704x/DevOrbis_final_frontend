@@ -51,7 +51,6 @@ function TaskDetail() {
         if (!response.ok) {
           throw new Error(data.message || "Failed to fetch task details.");
         }
-        console.log("Data", data);
         setTask(data.data);
       } catch (error) {
         if (error instanceof Error) {

@@ -113,7 +113,6 @@ function Chat() {
 
   useEffect(() => {
     function handleChatChunk(chunk: string) {
-      console.log("FRONTEND CHUNK:", chunk);
       setMessages((prev) => {
         const lastMessage = prev[prev.length - 1];
         if (lastMessage.from === "Ai") {

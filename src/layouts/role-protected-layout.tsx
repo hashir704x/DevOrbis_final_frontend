@@ -13,7 +13,6 @@ function RoleProtectedLayout() {
         protectedMatch?.handle as { allowedRoles?: role[] } | undefined
     )?.allowedRoles;
     if (allowedRoles && !allowedRoles.includes(user.role)) {
-        console.log("Khan");
         return <Navigate to="/" replace />;
     }
     return <Outlet />;
