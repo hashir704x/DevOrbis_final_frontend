@@ -124,7 +124,7 @@ function Chat() {
             },
           ];
         }
-        
+
         const lastMessage = prev[prev.length - 1];
         if (lastMessage.from === "Ai") {
           return [
@@ -268,6 +268,12 @@ function Chat() {
             type="text"
             value={message}
             onChange={(event) => setMessage(event.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault();
+                handleSendMessage();
+              }
+            }}
             placeholder="Ask anything"
             className="flex-1 bg-transparent px-3 py-3 text-sm outline-none placeholder:text-muted-foreground"
           />
