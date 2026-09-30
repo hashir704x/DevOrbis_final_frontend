@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router";
 import {
     CheckIcon,
     ClipboardTextIcon,
+    TrashIcon,
     UserCircleIcon,
     WarningCircleIcon,
 } from "@phosphor-icons/react";
@@ -25,6 +26,7 @@ import type { Staff, TaskDetail } from "@/types";
 import { toast } from "@/components/ui/toast";
 import { getPriorityLabel, getStatusLabel } from "@/utils/task-formatters";
 import { BACKEND_URL } from "@/utils/backend-url";
+import DeleteTaskDialog from "@/components/edit-task/delete-task-dialog";
 
 function EditTask() {
     const user = useAuthStore((state) => state.user) as User;
@@ -42,6 +44,7 @@ function EditTask() {
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
     const [error, setError] = useState("");
+    const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 
     useEffect(() => {
         (async function () {
@@ -161,6 +164,45 @@ function EditTask() {
             setSaving(false);
         }
     }
+
+    const handleDeleteTask = async () => {
+        try {
+            const response = await fetch(
+                `${BACKEND_URL}/api/tasks/delete-task/${taskId}`,
+                {
+                    method: "DELETE",
+                    credentials: "include",
+                },
+            );
+            const result = await response.json();
+            if (!response.ok || !result.success) {
+                throw new Error(result.message || "Failed to delete task");
+            }
+            toast.add({
+                type: "success",
+                description: "Task deleted successfully.",
+            });
+            setDeleteDialogOpen(false);
+            if (user.role === "admin") {
+                navigate("/admin");
+            } else {
+                navigate("/staff");
+            }
+        } catch (error) {
+            console.error("Failed to delete task:", error);
+            if (error instanceof Error) {
+                toast.add({
+                    type: "error",
+                    description: error.message,
+                });
+            } else {
+                toast.add({
+                    type: "error",
+                    description: "Something went wrong while deleting the task.",
+                });
+            }
+        }
+    };
 
     if (loading) {
         return (
@@ -456,6 +498,24 @@ function EditTask() {
                                 {task.leadName}
                             </p>
                         </div>
+                    </div>
+
+                    <div>
+                        <Button
+                            className="p-4 border-red-500 cursor-pointer"
+                            type="button"
+                            variant="destructive"
+                            onClick={() => setDeleteDialogOpen(true)}
+                        >
+                            <TrashIcon className="size-4" />
+                            Delete Task
+                        </Button>
+
+                        <DeleteTaskDialog
+                            open={deleteDialogOpen}
+                            onOpenChange={setDeleteDialogOpen}
+                            onConfirm={handleDeleteTask}
+                        />
                     </div>
 
                     {/* Save bar */}
