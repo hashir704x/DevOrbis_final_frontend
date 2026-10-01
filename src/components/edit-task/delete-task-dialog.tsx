@@ -9,19 +9,70 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { TrashIcon } from "@phosphor-icons/react";
+import { BACKEND_URL } from "@/utils/backend-url";
+import { toast } from "../ui/toast";
+import { useNavigate } from "react-router";
+import type { role } from "@/types";
 
 type DeleteTaskDialogProps = {
     open: boolean;
     onOpenChange: (open: boolean) => void;
-    onConfirm: () => Promise<void>;
+    taskId: string;
+    role: role;
+    setDeleteDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-function DeleteTaskDialog({ open, onOpenChange, onConfirm }: DeleteTaskDialogProps) {
+function DeleteTaskDialog({
+    open,
+    onOpenChange,
+    taskId,
+    setDeleteDialogOpen,
+    role,
+}: DeleteTaskDialogProps) {
     const [deleting, setDeleting] = useState(false);
+    const navigate = useNavigate();
+    const handleDeleteTask = async () => {
+        try {
+            const response = await fetch(
+                `${BACKEND_URL}/api/tasks/delete-task/${taskId}`,
+                {
+                    method: "DELETE",
+                    credentials: "include",
+                },
+            );
+            const result = await response.json();
+            if (!response.ok || !result.success) {
+                throw new Error(result.message || "Failed to delete task");
+            }
+            toast.add({
+                type: "success",
+                description: "Task deleted successfully.",
+            });
+            setDeleteDialogOpen(false);
+            if (role === "admin") {
+                navigate("/admin");
+            } else {
+                navigate("/staff");
+            }
+        } catch (error) {
+            console.error("Failed to delete task:", error);
+            if (error instanceof Error) {
+                toast.add({
+                    type: "error",
+                    description: error.message,
+                });
+            } else {
+                toast.add({
+                    type: "error",
+                    description: "Something went wrong while deleting the task.",
+                });
+            }
+        }
+    };
     const handleConfirm = async () => {
         try {
             setDeleting(true);
-            await onConfirm();
+            await handleDeleteTask();
         } finally {
             setDeleting(false);
         }

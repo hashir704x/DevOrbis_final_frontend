@@ -41,7 +41,6 @@ function VoiceChat() {
                         },
                     ]);
                 }
-
                 if (message.role === "assistant") {
                     setMessages((prev) => {
                         const lastMessage = prev[prev.length - 1];
@@ -94,7 +93,6 @@ function VoiceChat() {
     return (
         <div>
             <h1 className="text-3xl">Voice chat</h1>
-
             <div>
                 {!isCallActive ? (
                     <Button onClick={handleVoiceCall}>Start Voice</Button>
@@ -102,7 +100,6 @@ function VoiceChat() {
                     <Button onClick={handleStopCall}>Stop Voice</Button>
                 )}
             </div>
-
             <div className="mt-6 space-y-4">
                 {messages.map((message, index) => (
                     <div

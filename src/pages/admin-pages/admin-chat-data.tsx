@@ -1,72 +1,39 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Link, useParams } from "react-router";
-import { BACKEND_URL } from "@/utils/backend-url";
-import type { Message } from "@/types";
-import { Spinner } from "@/components/ui/spinner";
 import { ArrowLeftIcon } from "@phosphor-icons/react";
+import LoadingUi from "@/components/loading-ui";
+import ErrorUi from "@/components/error-ui";
+import { useAdminChatDataStore } from "@/store/admin-store/admin-chat-data-store";
 
 function AdminChatData() {
     const { chatId } = useParams();
-    const [messages, setMessages] = useState<Message[]>([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState("");
+    const messages = useAdminChatDataStore((state) => state.messages);
+    const loading = useAdminChatDataStore((state) => state.loading);
+    const error = useAdminChatDataStore((state) => state.error);
+    const fetchMessages = useAdminChatDataStore((state) => state.fetchMessages);
 
     useEffect(() => {
-        (async function () {
-            try {
-                setLoading(true);
-                setError("");
-                const response = await fetch(
-                    `${BACKEND_URL}/api/chat/get-chat-messages-for-admin/${chatId}`,
-                    {
-                        method: "GET",
-                        credentials: "include",
-                    },
-                );
-                const data = await response.json();
+        if (!chatId) {
+            return;
+        }
 
-                if (!response.ok) {
-                    throw new Error(data.message || "Failed to fetch chat messages");
-                }
+        fetchMessages(chatId);
+    }, [chatId, fetchMessages]);
 
-                setMessages(data.data);
-            } catch (error) {
-                setError(
-                    error instanceof Error
-                        ? error.message
-                        : "Something went wrong while fetching messages",
-                );
-            } finally {
-                setLoading(false);
-            }
-        })();
-    }, [chatId]);
 
     if (loading) {
-        return (
-            <div className="flex h-full items-center justify-center">
-                <Spinner className="size-7" />
-            </div>
-        );
+        return <LoadingUi />;
     }
-
     if (error) {
         return (
-            <div className="flex h-full flex-col items-center justify-center px-6">
-                <div className="w-full max-w-md rounded-lg border border-black bg-white p-6 text-center">
-                    <h2 className="text-lg font-semibold text-black">
-                        Failed to load conversation
-                    </h2>
-
-                    <p className="mt-2 text-sm text-gray-600">{error}</p>
-                </div>
-            </div>
+            <ErrorUi
+                errorMessage={error}
+                errorDescription="Failed to get chats data"
+            />
         );
     }
-
     return (
         <div className="flex h-full flex-col bg-white p-6">
-            {/* Header */}
             <div className="mb-5 flex items-center gap-4">
                 <Link
                     to="/admin/all-chats"
@@ -74,7 +41,6 @@ function AdminChatData() {
                 >
                     <ArrowLeftIcon size={18} />
                 </Link>
-
                 <div>
                     <h1 className="text-2xl font-semibold text-black">
                         Conversation
@@ -83,8 +49,6 @@ function AdminChatData() {
                     <p className="text-sm text-gray-500">Chat ID: {chatId}</p>
                 </div>
             </div>
-
-            {/* Chat */}
             <div className="flex-1 overflow-hidden rounded-lg border border-black">
                 {messages.length === 0 ? (
                     <div className="flex h-full items-center justify-center">
@@ -96,7 +60,6 @@ function AdminChatData() {
                     <div className="h-full space-y-6 overflow-y-auto p-6">
                         {messages.map((message, index) => {
                             const isHuman = message.from === "Human";
-
                             return (
                                 <div
                                     key={index}
@@ -114,7 +77,6 @@ function AdminChatData() {
                                         >
                                             {isHuman ? "User" : "AI"}
                                         </div>
-
                                         <div
                                             className={`rounded-2xl px-4 py-3 text-sm leading-6 ${
                                                 isHuman
@@ -136,5 +98,4 @@ function AdminChatData() {
         </div>
     );
 }
-
 export default AdminChatData;

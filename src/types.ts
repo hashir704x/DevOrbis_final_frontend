@@ -7,15 +7,6 @@ export type User = {
     role: role;
 };
 
-export type AuthState = {
-    user: User | null;
-    isAuthenticated: boolean;
-    isAuthLoading: boolean;
-
-    setUser: (user: User) => void;
-    clearUser: () => void;
-    setAuthLoading: (isAuthLoading: boolean) => void;
-};
 
 export type SideBarNavItem = {
     title: string;
@@ -59,7 +50,7 @@ export type Message = {
     content: string;
 };
 
-export type Task = {
+export type UserTask = {
     id: string;
     title: string;
     description: string;

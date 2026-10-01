@@ -1,26 +1,34 @@
 import ProtectedLayout from "./layouts/protected-layout";
 import { createBrowserRouter, RouterProvider } from "react-router";
 import AuthProvider from "./providers/auth-provider";
-import UserHome from "./pages/user-home";
 import Login from "./pages/login";
 import SignUp from "./pages/sign-up";
 import VerifyEmail from "./pages/verify-email";
 import PublicLayout from "./layouts/public-layout";
-import AdminHome from "./pages/admin-home";
-import StaffHome from "./pages/staff-home";
-import StaffTasks from "./pages/staff-tasks";
 import RoleProtectedLayout from "./layouts/role-protected-layout";
 import Landing from "./pages/landing";
-import KnowledgeBase from "./pages/knowledge-base";
-import Chat from "./pages/chat";
-import CreateTask from "./pages/create-task";
-import AdminTasks from "./pages/admin-tasks";
-import TaskDetail from "./pages/task-detail";
-import EditTask from "./pages/edit-task";
-import AiUsage from "./pages/ai-usage";
-import VoiceChat from "./pages/voice-chat";
-import AdminAllChats from "./pages/admin-all-chats";
-import AdminChatData from "./pages/admin-chat-data";
+
+// user pages
+import UserHome from "./pages/user-pages/user-home";
+import Chat from "./pages/user-pages/chat";
+import VoiceChat from "./pages/user-pages/voice-chat";
+
+// staff pages
+import StaffHome from "./pages/staff-pages/staff-home";
+import StaffTasks from "./pages/staff-pages/staff-tasks";
+
+// admin pages
+import AdminHome from "./pages/admin-pages/admin-home";
+import AdminTasks from "./pages/admin-pages/admin-tasks";
+import KnowledgeBase from "./pages/admin-pages/knowledge-base";
+import AdminAllChats from "./pages/admin-pages/admin-all-chats";
+import AdminChatData from "./pages/admin-pages/admin-chat-data";
+import AiUsage from "./pages/admin-pages/ai-usage";
+
+// admin staff shared pages
+import CreateTask from "./pages/admin-staff-pages/create-task";
+import EditTask from "./pages/admin-staff-pages/edit-task";
+import TaskDetail from "./pages/admin-staff-pages/task-detail";
 
 const router = createBrowserRouter([
     {
@@ -100,8 +108,8 @@ const router = createBrowserRouter([
                             },
                             {
                                 path: "chat-detail/:chatId",
-                                Component: AdminChatData
-                            }
+                                Component: AdminChatData,
+                            },
                         ],
                     },
                     {
